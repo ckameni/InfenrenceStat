@@ -24,4 +24,16 @@ https://www.youtube.com/watch?v=nZF_8QQEvj0
 
 
 ###Independent t-test - Explained Simply
+the series eplains how to perform a dependent t-test  understand what the test is, when it works,
+
+https://www.youtube.com/watch?v=3azuAaOJack
+https://www.youtube.com/watch?v=X3xUn40ycyM
+https://www.youtube.com/watch?v=nG-MOrtNgt8
+https://www.youtube.com/watch?v=PfBKBuYYb3o
 https://www.youtube.com/watch?v=IQgeSeRKkVY
+https://www.youtube.com/watch?v=wFp61RpDnA0
+https://www.youtube.com/watch?v=HqdvffPGgw0
+https://www.youtube.com/watch?v=-XCSZW7Z3S0
+
+
+
