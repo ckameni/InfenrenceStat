@@ -24,21 +24,10 @@ head(means)
 
 
 
-the mean of the distribution is:
-
-```{r}
-mean(means)
-```
 
 
-the theoretical mean of an exponential distribution is:
-
-```{r}
-mean_theo <- 1/lambda  #lambda=0.2
-```
-
-
-the following plot confirms that the means' sampling distribution is centered around 5.
+the following plot shows that the means' sampling distribution is centered around 5. we  will calculate the mean of the distrution to have
+the exact value 
 
 
 ```{r}
@@ -74,11 +63,25 @@ abline(h=mean(means),lwd=2, col="orange")
 ```
 
 
+the mean of the distribution is:
+
+```{r}
+mean_samp <- mean(means)
+mean_samp
+```
+
+the theoretical mean of an exponential distribution is:
+
+```{r}
+mean_theo <- 1/lambda  #lambda=0.2
+mean_theo 
+```
+
+we can see that both means have almost the same value.
 
 
-
-
- and compare it to  the theoretical center of the ditribution 
+ We want to draw both means in the same plot in order to show that they are almost the same.
+ 
 ```{r}
 histogram <-function(){
       
@@ -102,15 +105,53 @@ abline(v=1/.2,col="brown",lwd=3)
 ```
 
 
-we can from the histogram that the distribution of sample means is centered around 0.5
+
+
+
+2)
+
+
+standard deviation of the sample distribution
+```{r}
+#the standard deviation of the sample distribution is:
+sd_samp <- sd(means)
+
+# therefore the sampling variance is:
+var_samp <- var(means)
+var_samp
+
+```
 
 
 
 
-the theoretical center of the mean of  exponential distribution is 5.
+```{r}
+
+#the theoretical standard deviation is:
+sd_theo <- (1/lambda)/sqrt(sampleSize)
+
+# and the theoretical variance is:
+var_theo <- sd_theo^2
+            
+var_theo
+```
 
 
-      
+As we can see ,the sampling variance and the theoretical variance are almost the same.
+
+we take a look at the following comparison table to confirm that the differences  between both distributions are very insignificant.
+
+```{r}
+comparisonTable<-data.frame(Sampling=numeric(3),theoretical=numeric(3), difference=numeric(3))
+rownames(comparisonTable)<-c("mean","sd","var")
+comparisonTable[1,]<- c(mean_samp,mean_theo,mean_samp-mean_theo)
+comparisonTable[2,]<- c(sd_samp,sd_theo,sd_samp-sd_theo)
+comparisonTable[3,]<- c(var_samp,var_theo,var_samp-var_theo) 
+comparisonTable
+```
+
+
+
 3) show that the distribution is nearly norlmal
 ```{r}
 histogram2 <-function(){
@@ -131,6 +172,10 @@ hist(x, breaks=20,
 }
 
 histogram2()
+
+curve(dnorm(x,mean_samp,sd_samp), 3, 8, col="red", add=T)
+
+curve(dnorm(x,mean_theo,sd_theo), 3, 8, col="green", add=T)
 ```
 
 
