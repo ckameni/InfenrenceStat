@@ -1,0 +1,42 @@
+---
+title: 'Projeckt2: ToothGrowth'
+output: html_document
+---
+
+#1) Loading the data 
+```{r}
+
+library(datasets)
+
+boxplot( len ~ interaction(dose,supp), data=ToothGrowth,xlab="dose",ylab="length" )
+boxplot( len ~ interaction(supp,dose), data=ToothGrowth, xlab="dose",ylab="length")
+
+
+```
+
+This simple  graphical analysys shows that the length of tooth varies across the three dosages  and across the supplement types in the study. We will next take a look of some values in the data. 
+
+#2)
+
+```{r}
+
+require(prettyR)
+ describe(ToothGrowth,num.desc=c("mean","sd","median","min","max","valid.n"))
+
+
+head(ToothGrowth)
+unique(ToothGrowth$dose)
+ 
+```
+
+This simple  graphical analisys confirms the variation of the length of tooth  across the three dosages and supplement types. We will therefore conduct a formal analysis of the data. 
+
+
+#3Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
+
+```{r}
+alpha <- .05 
+z.half.alpha <- qnorm(1-alpha/2)
+c(-z.half.alpha, z.half.alpha)
+```
+
