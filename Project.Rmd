@@ -1,0 +1,156 @@
+---
+title: 'Project: Statistical inference'
+author: "Kameni"
+date: "Tuesday, October 21, 2014"
+output: html_document
+---
+
+
+```{r}
+set.seed(1243)
+lambda=0.2
+sampleSize<-40
+n <- 1000; 
+means <- replicate(n, mean(rexp(sampleSize,lambda)))
+```
+
+
+we take a look of the first 6 rows of the samplig distribution of
+
+```{r}
+head(means)
+
+```
+
+
+
+the mean of the distribution is:
+
+```{r}
+mean(means)
+```
+
+
+the theoretical mean of an exponential distribution is:
+
+```{r}
+mean_theo <- 1/lambda  #lambda=0.2
+```
+
+
+the following plot confirms that the means' sampling distribution is centered around 5.
+
+
+```{r}
+
+library(ggplot2)
+g <- ggplot(data.frame(x = 1 : n, y = means), aes(x = x, y = y)) 
+g <- g + geom_hline(yintercept = 0) + geom_line(size = 1) 
+g <- g + labs(x = "obs", y = "mean")
+g
+
+# Alternative
+
+sas<-function(){
+      x<-means
+      xlimits= range(means)
+      plot(
+            x,
+            type= "o",
+            xlab= "Obs",
+            ylab= "means",
+            xlim=xlimits, 
+            ylim=c(-15,15),
+            col="cornflowerblue",
+            )
+}
+
+sas()
+
+
+plot(x=means,y=NULL,type= "l",xlim=c(0, 1000),ylim=c(-20, 15),las=1,col="black",)
+abline(h=mean(means),lwd=2, col="orange")
+
+```
+
+
+
+
+
+
+ and compare it to  the theoretical center of the ditribution 
+```{r}
+histogram <-function(){
+      
+xlimits= range(means)
+x<-means
+hist(x, breaks=20,
+     col="cornflowerblue", 
+     border="white",
+     xlim=xlimits, 
+     main="", 
+     xlab="means", 
+     ylab="Frequeny"
+     )
+}
+
+histogram()
+abline(v=mean(means),col="yellow",lwd=2) 
+abline(v=1/.2,col="brown",lwd=3) 
+ 
+
+```
+
+
+we can from the histogram that the distribution of sample means is centered around 0.5
+
+
+
+
+the theoretical center of the mean of  exponential distribution is 5.
+
+
+      
+3) show that the distribution is nearly norlmal
+```{r}
+histogram2 <-function(){
+      
+xlimits= range(means)
+x<-means
+hist(x, breaks=20,
+     prob=TRUE, 
+     col="cornflowerblue", 
+     border="white",
+     xlim=xlimits, 
+     main="", 
+     xlab="means", 
+     ylab="Frequeny"
+     )
+      lines(density(means), lwd=2, col="orange")
+      text(65, 0.025, paste("N =", sum(means)), cex=1.2)     
+}
+
+histogram2()
+```
+
+
+
+
+
+```{r}
+
+# Create the base plotting window
+# type = "n" does not plot the points
+# Set the background color to "yellow"
+par(bg = "white")
+plot(means, type = "l",ylim= c(-15,15))
+# Now set the plot region to grey
+rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = 
+"grey")
+
+# Now plot the points on the existing window
+plot(means,ylim= c(-15,15),type="l")
+lines(means)
+
+```
+
