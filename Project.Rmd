@@ -167,35 +167,16 @@ hist(x, breaks=20,
      xlab="means", 
      ylab="Frequeny"
      )
-      lines(density(means), lwd=2, col="orange")
+      lines(density(means), col="orange",lwd=4)
       text(65, 0.025, paste("N =", sum(means)), cex=1.2)     
 }
 
 histogram2()
 
-curve(dnorm(x,mean_samp,sd_samp), 3, 8, col="red", add=T)
+curve(dnorm(x,mean_samp,sd_samp), 0, 8, col="red", add=T,lwd=4)
 
-curve(dnorm(x,mean_theo,sd_theo), 3, 8, col="green", add=T)
+
 ```
 
 
-
-
-
-```{r}
-
-# Create the base plotting window
-# type = "n" does not plot the points
-# Set the background color to "yellow"
-par(bg = "white")
-plot(means, type = "l",ylim= c(-15,15))
-# Now set the plot region to grey
-rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = 
-"grey")
-
-# Now plot the points on the existing window
-plot(means,ylim= c(-15,15),type="l")
-lines(means)
-
-```
 
