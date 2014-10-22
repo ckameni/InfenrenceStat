@@ -6,8 +6,9 @@ output: html_document
 ---
 
 
+## Processing the data
 ```{r}
-set.seed(1243)
+set.seed(124)
 lambda=0.2
 sampleSize<-40
 n <- 1000; 
@@ -23,32 +24,23 @@ head(means)
 ```
 
 
+## 1)
 
-
-
-the following plot shows that the means' sampling distribution is centered around 5. we  will calculate the mean of the distrution to have
-the exact value 
+the following plot shows that the means' sampling distribution is centered around 5.
+In the next step,we  will calculate its  exact value.
 
 
 ```{r}
 
-library(ggplot2)
-g <- ggplot(data.frame(x = 1 : n, y = means), aes(x = x, y = y)) 
-g <- g + geom_hline(yintercept = 0) + geom_line(size = 1) 
-g <- g + labs(x = "obs", y = "mean")
-g
-
-# Alternative
-
 sas<-function(){
       x<-means
-      xlimits= range(means)
       plot(
             x,
-            type= "o",
+            y=NULL,
+            type= "l",
             xlab= "Obs",
             ylab= "means",
-            xlim=xlimits, 
+            xlim=c(0, 1000), 
             ylim=c(-15,15),
             col="cornflowerblue",
             )
@@ -56,8 +48,6 @@ sas<-function(){
 
 sas()
 
-
-plot(x=means,y=NULL,type= "l",xlim=c(0, 1000),ylim=c(-20, 15),las=1,col="black",)
 abline(h=mean(means),lwd=2, col="orange")
 
 ```
@@ -77,10 +67,10 @@ mean_theo <- 1/lambda  #lambda=0.2
 mean_theo 
 ```
 
-we can see that both means have almost the same value.
+ we can see that both means have almost the same value.
 
 
- We want to draw both means in the same plot in order to show that they are almost the same.
+Now We want to draw both means in the same plot in order to show that they are almost the same.
  
 ```{r}
 histogram <-function(){
@@ -98,7 +88,7 @@ hist(x, breaks=20,
 }
 
 histogram()
-abline(v=mean(means),col="yellow",lwd=2) 
+abline(v=mean(means),col="yellow",lwd=3) 
 abline(v=1/.2,col="brown",lwd=3) 
  
 
@@ -108,10 +98,10 @@ abline(v=1/.2,col="brown",lwd=3)
 
 
 
-2)
+##2)
 
 
-standard deviation of the sample distribution
+ variation of the sample distribution
 ```{r}
 #the standard deviation of the sample distribution is:
 sd_samp <- sd(means)
@@ -124,7 +114,7 @@ var_samp
 
 
 
-
+the theoretical  variation 
 ```{r}
 
 #the theoretical standard deviation is:
@@ -152,7 +142,7 @@ comparisonTable
 
 
 
-3) show that the distribution is nearly norlmal
+##3) show that the distribution is nearly norlmal
 ```{r}
 histogram2 <-function(){
       
@@ -167,16 +157,30 @@ hist(x, breaks=20,
      xlab="means", 
      ylab="Frequeny"
      )
-      lines(density(means), col="orange",lwd=4)
+      lines(density(means), col="orange",lwd=3)
       text(65, 0.025, paste("N =", sum(means)), cex=1.2)     
 }
 
 histogram2()
 
-curve(dnorm(x,mean_samp,sd_samp), 0, 8, col="red", add=T,lwd=4)
+curve(dnorm(x,mean_samp,sd_samp), 0, 8, col="green", add=T,lwd=4)
 
 
 ```
 
 
+ as we can see from the plots the distribution is nearly normal.
+
+
+
+##4)
+
+Let’s now evaluate the coverage of the confidence interval for 1/lambda: X¯±1.96Snv
+
+
+
+```{r}
+
+
+```
 
