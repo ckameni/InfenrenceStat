@@ -24,7 +24,7 @@ head(means)
 ```
 
 
-## 1)
+## 1)Show where the distribution is centered at and compare it to the theoretical center of the distribution
 
 the following plot shows that the means' sampling distribution is centered around 5.
 In the next step,we  will calculate its  exact value.
@@ -98,7 +98,7 @@ abline(v=1/.2,col="brown",lwd=3)
 
 
 
-##2)
+##2)Show how variable it is and compare it to the theoretical variance of the distribution.
 
 
  variation of the sample distribution
@@ -142,7 +142,7 @@ comparisonTable
 
 
 
-##3) show that the distribution is nearly norlmal
+##3) Show that the distribution is approximately normal
 ```{r}
 histogram2 <-function(){
       
@@ -163,24 +163,21 @@ hist(x, breaks=20,
 
 histogram2()
 
-curve(dnorm(x,mean_samp,sd_samp), 0, 8, col="green", add=T,lwd=4)
+curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
 
 
 ```
 
 
- as we can see from the plots the distribution is nearly normal.
+ as we can see from the plots the distribution is aproximately normal.
 
 
 
-##4)
-
-Let’s now evaluate the coverage of the confidence interval for 1/lambda: X¯±1.96Snv
-
+##4) Evaluate the coverage of the confidence interval 
 
 
 ```{r}
 
-
+mean_samp + c(-1,1)*1.96*sd_samp/sqrt(40)
 ```
 
