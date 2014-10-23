@@ -1,10 +1,11 @@
 ---
 title: 'Projeckt2: ToothGrowth'
-output: html_document
+output: word_document
+fontsize: 9pt
 ---
 
-#1) Loading the data 
-```{r}
+ 1) Loading the data and  basic exploratory data analyses 
+```{r,echo=FALSE}
 
 library(datasets)
 
@@ -16,27 +17,67 @@ boxplot( len ~ interaction(supp,dose), data=ToothGrowth, xlab="dose",ylab="lengt
 
 This simple  graphical analysys shows that the length of tooth varies across the three dosages  and across the supplement types in the study. We will next take a look of some values in the data. 
 
-#2)
+###2)
 
-```{r}
+```{r,echo=TRUE,eval=FALSE}
 
 require(prettyR)
  describe(ToothGrowth,num.desc=c("mean","sd","median","min","max","valid.n"))
-
-
-head(ToothGrowth)
-unique(ToothGrowth$dose)
+#head(ToothGrowth)
+#unique(ToothGrowth$dose)
  
 ```
 
 This simple  graphical analisys confirms the variation of the length of tooth  across the three dosages and supplement types. We will therefore conduct a formal analysis of the data. 
 
 
-#3Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
+ 3) Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
 
 ```{r}
+#library(UsingR);
+data(father.son); x <- father.son$sheight
+(mean(x) + c(-1, 1) * qnorm(.975) * sd(x) / sqrt(length(x))) / 12
+round(1 / sqrt(10 ^ (1 : 6)), 3)
+
 alpha <- .05 
 z.half.alpha <- qnorm(1-alpha/2)
 c(-z.half.alpha, z.half.alpha)
 ```
 
+
+
+We now evaluate the hypothesis that supplement OJ does not improve growth more than the VC supplement.
+```{r}
+t.test(x$len[x$supp=="OJ"],x$len[x$supp=="VC"],paired=TRUE)
+```
+
+
+
+As the 95% confidence interval contains the sample mean of the differences, the hypothesis cannot be rejected. There is insufficient evidence to conclude that supplement VC works any better than supplement OJ.
+
+We now evaluate the hypothesis that dosage does improve growth.
+
+
+```{r}
+t.test(x$len,x$dose)
+```
+
+#### Summary
+With the Welch two sample t-test, the 95% confidence interval contains the sample mean, the hypothesis cannot be rejected. There is sufficient evidence to conclude that increased dosages do affect tooth Growth.
+
+
+```{r}
+require(reshape2)
+a<-dcast(ToothGrowth, supp + dose ~ 1:10, value.var = "len") # because there are 10 observations for each
+a
+```
+
+
+
+#Were multiple comparisons
+My understanding is doing t-test between pairs of all combinations of (supp, dose). (VC-0.5 : VC-1); (VC-0.5: VC-2); (VC-0.5:OJ-0.5) ...; You might want check out lecture wk4 for adjusted p-values for multiple testing before you do the lab
+
+
+You could test for no difference between the two supp: H0: mean(supp1.len) = mean(supp2.len)
+Test for no difference between supp and dose: H0: mean(supp1.len at dose=0.5) = mean(supp2.len at dose=0.5)
+Take a look at slides 16-18 in the presentation on hypothesis testing to get an idea of what to do. I think a few t.tests should do it. 
