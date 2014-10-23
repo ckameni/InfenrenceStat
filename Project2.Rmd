@@ -9,6 +9,7 @@ fontsize: 9pt
 
 library(datasets)
 attach(ToothGrowth)
+detach(ToothGrowth)
 boxplot( len ~ interaction(dose,supp), data=ToothGrowth,xlab="dose",ylab="length" )
 
 #boxplot( len ~ interaction(supp,dose), data=ToothGrowth, xlab="dose",ylab="length")
@@ -34,24 +35,39 @@ This simple  graphical analisys confirms the variation of the length of tooth  a
 
  3) Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
 
+```{r}
+t.test(ToothGrowth$len~ToothGrowth$supp)
+
+```
+
+
 We now evaluate the hypothesis that dose 0.5 does not improve growth more than the 1 dose.
 ```{r}
 
-dose_05_1 <- subset(ToothGrowth,  dose %in% c(0.5, 1)) #1
-dose_05_2 <- subset(ToothGrowth,  dose %in% c(0.5, 2)) #2
-dose_2_1 <- subset(ToothGrowth,  dose %in% c(2, 1))    #3
+t5_and_1 <- subset(ToothGrowth,  dose %in% c(0.5, 1)) #1
+t5_and_2 <- subset(ToothGrowth,  dose %in% c(0.5, 2)) #2
+t2_and_1 <- subset(ToothGrowth,  dose %in% c(2, 1))    #3
 
 
-Test_dose_05_1<-t.test(len ~ dose,data = dose_05_1);Test_dose_05_1##1
-Test_dose_05_2 <-t.test(len ~ dose, data = dose_05_2);Test_dose_05_2##2
-Test_dose_2_1 <-t.test(len ~ dose, data = dose_2_1);Test_dose_2_1##3
-rbind(
-      Test_dose_05_1,
-      Test_dose_05_2,
-      Test_dose_2_1
+Test_05_1 <-t.test(len ~ dose, data =t5_and_1)##1
+Test_05_2 <-t.test(len ~ dose, data = t5_and_2)##2
+dose_2_1  <-t.test(len ~ dose, data = t2_and_1)##3
+df<-data.frame("LowCOnf"=round(c(
+            Test_05_1$conf[1],
+            Test_05_2$conf[1],
+            dose_2_1$conf[1]),3),
+            "HightConf"=round(c(
+            Test_05_1$conf[2],
+            Test_05_2$conf[2],
+            dose_2_1$conf[2]),3),
+            "P.Value"=c(
+            round(Test_05_1$p.value,10),
+            round(Test_05_2$p.value,17),
+            round(dose_2_1$p.value,8)),
+            "Test"=c("0.5 vs 1","0.5 vs 2","2 vs 1")
 )
-
-
+           
+df
 ```
 
 if you were repeatly perform this procedure on indepedent samples about 95% 
@@ -65,10 +81,6 @@ As the 95% confidence interval contains the sample mean of the differences, the 
 
 We now evaluate the hypothesis that dosage does improve growth.
 
-
-```{r}
-t.test(x$len,x$dose)
-```
 
 #### Summary
 With the Welch two sample t-test, the 95% confidence interval contains the sample mean, the hypothesis cannot be rejected. There is sufficient evidence to conclude that increased dosages do affect tooth Growth.
