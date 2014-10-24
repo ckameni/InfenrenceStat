@@ -1,8 +1,8 @@
 ---
 title: 'Project1 Simulation '
-date: "Tuesday, October 21, 2014"
-output: word_document
 fontsize: 9pt
+date: "Tuesday, October 21, 2014"
+output: pdf_document
 ---
 
 
@@ -15,102 +15,48 @@ means <- replicate(1000, mean(rexp(40,lambda)))
 ```
 
 
+###### 1)where is the distribution is centered at?
 
-###### 1)Show where the distribution is centered at and compare it to the theoretical center of the distribution
-
-the following plot shows that the means' sampling distribution is centered around 5.
-In the next step,we  will calculate its  exact value.
-
-
-```{r,tableau1,echo=FALSE}
-
-sas<-function(){
-      x<-means
-      plot(
-            x,
-            y=NULL,
-            type= "l",
-            xlab= "Obs",
-            ylab= "means",
-            xlim=c(0, 1000), 
-            ylim=c(-15,15),
-            col="cornflowerblue",
-            )
-}
-
-sas()
-abline(h=mean(means),lwd=2, col="orange")
-
-```
-
-
-the mean of the distribution is:
-
-```{r,echo=FALSE}
+```{r,results='hide',echo=FALSE}
 mean_samp <- mean(means)
-mean_samp
-```
-
-the theoretical mean of an exponential distribution is:
-
-```{r,echo=FALSE}
 mean_theo <- 1/lambda  #lambda=0.2
-mean_theo 
-```
-
- we can see that both means have almost the same value.
-
-
-Now We want to draw both means in the same plot in order to show that they are almost the same.
- 
-```{r tableau2,echo=FALSE}
-histogram <-function(){
-      
-xlimits= range(means)
-x<-means
-hist(x, breaks=20,
-     col="cornflowerblue", 
-     border="white",
-     xlim=xlimits, 
-     main="", 
-     xlab="means", 
-     ylab="Frequeny"
-     )
-}
-
-histogram()
-abline(v=mean(means),col="yellow",lwd=3) 
-abline(v=1/.2,col="brown",lwd=3) 
- 
 
 ```
+
+The mean of the distribution is:`r mean_samp` and the theoretical mean of an exponential distribution is:`r mean_theo `
+
+
+```{r,tableau1,echo=FALSE,fig.height=4}
+sas<-function(){
+      plot( means, y=NULL,type= "l", xlab= "Obs",ylab= "means",xlim=c(0, 1000), 
+            ylim=c(-15,15),col="cornflowerblue")}
+sas();abline(h=mean(means),lwd=2, col="orange")
+```
+ We can see that both means have almost the same value. In fact there is a minimal difference between them. Therefore we can conclude that the means' sampling distribution is centered around the population one.
 
 
 
 ######2) variability of theoretical and sampling distribution.
 
 
-```{r}
+```{r,results='hide'}
 #the standard deviation and varianceof the sample distribution 
 sd_samp <- sd(means);var_samp <- var(means);var_samp
 
 ```
-the variance of the sample distribution is 
 
+the variance of the sample distribution is `r var_samp`
 
-
-```{r}
-# the theoretical standard deviation and the theoretical variance i
-sd_theo <- (1/lambda)/sqrt(sampleSize);var_theo <- sd_theo^2      
-var_theo
+```{r,results='hide'}
+sd_theo <- (1/lambda)/sqrt(40);var_theo <- sd_theo^2 ; var_theo
 ```
-the theoretical  variance is:
+the theoretical  variance is:`r var_theo`
 
 As we can see ,the value of the  sampling variance converges to  theoretical one.
 
 we take a look at the following comparison table to confirm that the differences  between both distributions are very insignificant.
 
-```{recho=FALSE}
+```{recho=FALSE,echo=FALSE}
 comparisonTable<-data.frame(Sampling=numeric(3),theoretical=numeric(3), difference=numeric(3))
 rownames(comparisonTable)<-c("mean","sd","var")
 comparisonTable[1,]<- c(mean_samp,mean_theo,mean_samp-mean_theo)
@@ -122,75 +68,125 @@ comparisonTable
 
 
 ######3) Show that the distribution is approximately normal
-```{r tableaux_hi ,echo=FALSE}
-histogram2 <-function(){
-x<-means
-hist(x, breaks=20,
-     prob=TRUE, 
-     col="cornflowerblue", 
-     border="white",
-     xlim= c(1,1000), 
-     main="", 
-     xlab="means", 
-     ylab="Frequeny"
-     )
-      lines(density(means), col="orange",lwd=3)
-}
-
-histogram2()
-
+```{r ,bbtabl, ,echo=FALSE}
+hist(means, breaks=20,prob=TRUE,col="cornflowerblue",border="white",
+     xlim=range(means),xlab="means",ylab="Frequeny")
 curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
-
-histogram12 <-function(){
-      
-xlimits= range(means)
-x<-means
-hist(x, breaks=20,
-     col="cornflowerblue", 
-     border="white",
-     xlim=xlimits, 
-     main="", 
-     xlab="means", 
-     ylab="Frequeny"
-     )
-}
-
-histogram12()
-abline(v=mean(means),col="yellow",lwd=3) 
-abline(v=1/.2,col="brown",lwd=3) ()
-
-curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
-
-
+lines(density(means), col="orange",lwd=3) # bell curve
 
 ```
 
-
- as we can see from the plots the distribution is aproximately normal.
-
+ As we can see from the plot the samplind distribution(in orange)  not exactly but nearly bell-shaped. It tends aproximately to the  standard normal curve( in green).
 
 
-######4) Evaluate the coverage of the confidence interval 
+######4) Evaluate the coverage of the confidence interval
 
-```{r}
+
+```{r, results='hide'}
 interval<-mean_samp + c(-1,1)*1.96*sd_samp/sqrt(1000)
 
 ```
 
 
-
-```{r}
-set.seed(1242);n <- 40;nosim <- 1000
+```{r,echo=FALSE,results='hide'}
+  n <- 40;nosim <- 1000
   xbar <- replicate(nosim, mean(rexp(n,lambda)))
   ll <- xbar - qnorm(.975) * (1/lambda)/sqrt(n)
   ul <- xbar + qnorm(.975) * (1/lambda)/sqrt(n)
 coverage<-cbind(ll,ul)
-rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate
+rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate<-rate*100
+```
+
+The 95% confidence interval of the sampling mean is :`r interval` the coverage rate is:`r rate`
 
 
- 
+As we can see, the simulation' subjects are relevant samples of the population of subjects that we are interested in.The coverage rate shows that if we construct a 95% Confidence Interval for a sample mean, then theoretically 95% of the time that CI will fall over the true population mean. 
+
+
+
+
+
+# appendix
+
+
+###### 1)where is the distribution is centered at?
+
+The mean of the distribution  and the theoretical mean of an exponential distribution 
+
+```{r, echo=TRUE,eval=FALSE}
+mean_samp <- mean(means)
+mean_theo <- 1/lambda  #lambda=0.2
+
 ```
 
 
-The 95% confidence interval of the sampling mean is :
-with a:   it assumes that the subjects are relevant samples of the population of subjects that we are interested in.
+
+
+ploutting the mean distribution
+```{r,echo=TRUE, eval=FALSE}
+sas<-function(){
+      plot( means, y=NULL,type= "l", xlab= "Obs",ylab= "means",xlim=c(0, 1000), 
+            ylim=c(-15,15),col="cornflowerblue")}
+sas();abline(h=mean(means),lwd=2, col="orange")
+```
+
+
+######2) variability of theoretical and sampling distribution.
+
+code fort he variance of the sample distribution 
+```{r,echo=TRUE, eval=FALSE}
+#the standard deviation and varianceof the sample distribution 
+sd_samp <- sd(means);var_samp <- var(means);var_samp
+
+```
+
+
+ formalua for the theoretical  variance 
+```{r,echo=TRUE, eval=FALSE}
+sd_theo <- (1/lambda)/sqrt(40);var_theo <- sd_theo^2 ; var_theo
+```
+`
+
+
+ comparison table to show differences  between both distributions 
+
+```{r ,echo=TRUE, eval=FALSE}
+comparisonTable<-data.frame(Sampling=numeric(3),theoretical=numeric(3), difference=numeric(3))
+rownames(comparisonTable)<-c("mean","sd","var")
+comparisonTable[1,]<- c(mean_samp,mean_theo,mean_samp-mean_theo)
+comparisonTable[2,]<- c(sd_samp,sd_theo,sd_samp-sd_theo)
+comparisonTable[3,]<- c(var_samp,var_theo,var_samp-var_theo) 
+comparisonTable
+```
+
+
+
+######3) Show that the distribution is approximately normal
+histogram code with bell curve
+
+```{r ,bbtabl, echo=TRUE, eval=FALSE}
+hist(means, breaks=20,prob=TRUE,col="cornflowerblue",border="white",
+     xlim=range(means),xlab="means",ylab="Frequeny")
+curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
+lines(density(means), col="orange",lwd=3) # bell curve
+
+```
+
+
+######4) Evaluate the coverage of the confidence interval
+
+code for confidence interval
+```{r, echo-TRUE, eval=FALSE}
+interval<-mean_samp + c(-1,1)*1.96*sd_samp/sqrt(1000)
+
+```
+
+code for calculating coverage
+```{r,echo=TRUE, eval=FALSE}
+  n <- 40;nosim <- 1000
+  xbar <- replicate(nosim, mean(rexp(n,lambda)))
+  ll <- xbar - qnorm(.975) * (1/lambda)/sqrt(n)
+  ul <- xbar + qnorm(.975) * (1/lambda)/sqrt(n)
+coverage<-cbind(ll,ul)
+rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate<-rate*100
+```
