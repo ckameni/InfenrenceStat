@@ -23,7 +23,7 @@ mean_theo <- 1/lambda  #lambda=0.2
 
 ```
 
-The mean of the distribution is:`r mean_samp` and the theoretical mean of an exponential distribution is:`r mean_theo `
+The mean of the distribution is: `r mean_samp` and the theoretical mean of an exponential distribution is: `r mean_theo `
 
 
 ```{r,tableau1,echo=FALSE,fig.height=4}
@@ -32,6 +32,7 @@ sas<-function(){
             ylim=c(-15,15),col="cornflowerblue")}
 sas();abline(h=mean(means),lwd=2, col="orange")
 ```
+ 
  We can see that both means have almost the same value. In fact there is a minimal difference between them. Therefore we can conclude that the means' sampling distribution is centered around the population one.
 
 
@@ -45,12 +46,12 @@ sd_samp <- sd(means);var_samp <- var(means);var_samp
 
 ```
 
-the variance of the sample distribution is `r var_samp`
+the variance of the sample distribution is: `r var_samp`
 
 ```{r,results='hide'}
 sd_theo <- (1/lambda)/sqrt(40);var_theo <- sd_theo^2 ; var_theo
 ```
-the theoretical  variance is:`r var_theo`
+the theoretical  variance is: `r var_theo`
 
 As we can see ,the value of the  sampling variance converges to  theoretical one.
 
@@ -97,7 +98,7 @@ coverage<-cbind(ll,ul)
 rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate<-rate*100
 ```
 
-The 95% confidence interval of the sampling mean is :`r interval` the coverage rate is:`r rate`
+The 95% confidence interval of the sampling mean is :`r interval` the coverage rate is: `r rate`
 
 
 As we can see, the simulation' subjects are relevant samples of the population of subjects that we are interested in.The coverage rate shows that if we construct a 95% Confidence Interval for a sample mean, then theoretically 95% of the time that CI will fall over the true population mean. 
@@ -190,3 +191,9 @@ code for calculating coverage
 coverage<-cbind(ll,ul)
 rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate<-rate*100
 ```
+
+
+```{r}
+sessionInfo()
+```
+
