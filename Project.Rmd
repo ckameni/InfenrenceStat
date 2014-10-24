@@ -1,5 +1,5 @@
 ---
-title: 'Project1: Simulation
+title: 'Project1 Simulation '
 date: "Tuesday, October 21, 2014"
 output: word_document
 fontsize: 9pt
@@ -11,7 +11,6 @@ fontsize: 9pt
 ```{r}
 set.seed(1234)
 lambda=0.2
- ####  1000 Simulations of the average of 40 exp(0.2) variables.  
 means <- replicate(1000, mean(rexp(40,lambda)))
 ```
 
@@ -23,7 +22,7 @@ the following plot shows that the means' sampling distribution is centered aroun
 In the next step,we  will calculate its  exact value.
 
 
-```{r}
+```{r,tableau1,echo=FALSE}
 
 sas<-function(){
       x<-means
@@ -40,7 +39,6 @@ sas<-function(){
 }
 
 sas()
-
 abline(h=mean(means),lwd=2, col="orange")
 
 ```
@@ -48,14 +46,14 @@ abline(h=mean(means),lwd=2, col="orange")
 
 the mean of the distribution is:
 
-```{r}
+```{r,echo=FALSE}
 mean_samp <- mean(means)
 mean_samp
 ```
 
 the theoretical mean of an exponential distribution is:
 
-```{r}
+```{r,echo=FALSE}
 mean_theo <- 1/lambda  #lambda=0.2
 mean_theo 
 ```
@@ -65,7 +63,7 @@ mean_theo
 
 Now We want to draw both means in the same plot in order to show that they are almost the same.
  
-```{r}
+```{r tableau2,echo=FALSE}
 histogram <-function(){
       
 xlimits= range(means)
@@ -92,14 +90,9 @@ abline(v=1/.2,col="brown",lwd=3)
 ######2) variability of theoretical and sampling distribution.
 
 
- 
 ```{r}
-#the standard deviation of the sample distribution is:
-sd_samp <- sd(means)
-
-# therefore the sampling variance is:
-var_samp <- var(means)
-var_samp
+#the standard deviation and varianceof the sample distribution 
+sd_samp <- sd(means);var_samp <- var(means);var_samp
 
 ```
 the variance of the sample distribution is 
@@ -107,13 +100,8 @@ the variance of the sample distribution is
 
 
 ```{r}
-
-#the theoretical standard deviation is:
-sd_theo <- (1/lambda)/sqrt(sampleSize)
-
-# and the theoretical variance is:
-var_theo <- sd_theo^2
-            
+# the theoretical standard deviation and the theoretical variance i
+sd_theo <- (1/lambda)/sqrt(sampleSize);var_theo <- sd_theo^2      
 var_theo
 ```
 the theoretical  variance is:
@@ -122,7 +110,7 @@ As we can see ,the value of the  sampling variance converges to  theoretical one
 
 we take a look at the following comparison table to confirm that the differences  between both distributions are very insignificant.
 
-```{r}
+```{recho=FALSE}
 comparisonTable<-data.frame(Sampling=numeric(3),theoretical=numeric(3), difference=numeric(3))
 rownames(comparisonTable)<-c("mean","sd","var")
 comparisonTable[1,]<- c(mean_samp,mean_theo,mean_samp-mean_theo)
@@ -134,13 +122,30 @@ comparisonTable
 
 
 ######3) Show that the distribution is approximately normal
-```{r}
+```{r tableaux_hi ,echo=FALSE}
 histogram2 <-function(){
+x<-means
+hist(x, breaks=20,
+     prob=TRUE, 
+     col="cornflowerblue", 
+     border="white",
+     xlim= c(1,1000), 
+     main="", 
+     xlab="means", 
+     ylab="Frequeny"
+     )
+      lines(density(means), col="orange",lwd=3)
+}
+
+histogram2()
+
+curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
+
+histogram12 <-function(){
       
 xlimits= range(means)
 x<-means
 hist(x, breaks=20,
-     prob=TRUE, 
      col="cornflowerblue", 
      border="white",
      xlim=xlimits, 
@@ -148,13 +153,14 @@ hist(x, breaks=20,
      xlab="means", 
      ylab="Frequeny"
      )
-      lines(density(means), col="orange",lwd=3)
-      text(65, 0.025, paste("N =", sum(means)), cex=1.2)     
 }
 
-histogram2()
+histogram12()
+abline(v=mean(means),col="yellow",lwd=3) 
+abline(v=1/.2,col="brown",lwd=3) ()
 
 curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
+
 
 
 ```
