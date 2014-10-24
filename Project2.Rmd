@@ -70,12 +70,6 @@ df<-data.frame("LowCOnf"=round(c(
 df
 ```
 
-if you were repeatly perform this procedure on indepedent samples about 95% 
-
-of the intervals that we'd obtain would contain the true mean difference that we estimated. it assumes that the subjects are releant samples of the population of subjects that we are interested in.
-
-if the groups
-
 
 As the 95% confidence interval contains the sample mean of the differences, the hypothesis cannot be rejected. There is insufficient evidence to conclude that supplement VC works any better than supplement OJ.
 

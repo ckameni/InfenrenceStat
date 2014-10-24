@@ -1,30 +1,23 @@
 ---
-title: 'Project: Statistical inference'
-author: "Kameni"
+title: 'Project1: Simulation
 date: "Tuesday, October 21, 2014"
-output: html_document
+output: word_document
+fontsize: 9pt
 ---
 
 
-## Processing the data
+###### sysnopsis
+ This analisys will illustrate the  Central Limit theorem  with the aid of simulations of averages of 40 exponential (lambda = 0.2). 
 ```{r}
-set.seed(124)
+set.seed(1234)
 lambda=0.2
-sampleSize<-40
-n <- 1000; 
-means <- replicate(n, mean(rexp(sampleSize,lambda)))
+ ####  1000 Simulations of the average of 40 exp(0.2) variables.  
+means <- replicate(1000, mean(rexp(40,lambda)))
 ```
 
 
-we take a look of the first 6 rows of the samplig distribution of
 
-```{r}
-head(means)
-
-```
-
-
-## 1)Show where the distribution is centered at and compare it to the theoretical center of the distribution
+###### 1)Show where the distribution is centered at and compare it to the theoretical center of the distribution
 
 the following plot shows that the means' sampling distribution is centered around 5.
 In the next step,we  will calculate its  exact value.
@@ -96,12 +89,10 @@ abline(v=1/.2,col="brown",lwd=3)
 
 
 
+######2) variability of theoretical and sampling distribution.
 
 
-##2)Show how variable it is and compare it to the theoretical variance of the distribution.
-
-
- variation of the sample distribution
+ 
 ```{r}
 #the standard deviation of the sample distribution is:
 sd_samp <- sd(means)
@@ -111,10 +102,10 @@ var_samp <- var(means)
 var_samp
 
 ```
+the variance of the sample distribution is 
 
 
 
-the theoretical  variation 
 ```{r}
 
 #the theoretical standard deviation is:
@@ -125,9 +116,9 @@ var_theo <- sd_theo^2
             
 var_theo
 ```
+the theoretical  variance is:
 
-
-As we can see ,the sampling variance and the theoretical variance are almost the same.
+As we can see ,the value of the  sampling variance converges to  theoretical one.
 
 we take a look at the following comparison table to confirm that the differences  between both distributions are very insignificant.
 
@@ -142,7 +133,7 @@ comparisonTable
 
 
 
-##3) Show that the distribution is approximately normal
+######3) Show that the distribution is approximately normal
 ```{r}
 histogram2 <-function(){
       
@@ -173,11 +164,27 @@ curve(dnorm(x,mean_theo,sd_theo), 0, 8, col="green", add=T,lwd=3)
 
 
 
-##4) Evaluate the coverage of the confidence interval 
+######4) Evaluate the coverage of the confidence interval 
+
+```{r}
+interval<-mean_samp + c(-1,1)*1.96*sd_samp/sqrt(1000)
+
+```
+
 
 
 ```{r}
+set.seed(1242);n <- 40;nosim <- 1000
+  xbar <- replicate(nosim, mean(rexp(n,lambda)))
+  ll <- xbar - qnorm(.975) * (1/lambda)/sqrt(n)
+  ul <- xbar + qnorm(.975) * (1/lambda)/sqrt(n)
+coverage<-cbind(ll,ul)
+rate <- nrow(coverage[ll < mean_theo & ul > mean_theo,])/1000;rate
 
-mean_samp + c(-1,1)*1.96*sd_samp/sqrt(40)
+
+ 
 ```
 
+
+The 95% confidence interval of the sampling mean is :
+with a:   it assumes that the subjects are relevant samples of the population of subjects that we are interested in.
