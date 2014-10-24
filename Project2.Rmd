@@ -1,6 +1,6 @@
 ---
 title: 'Projeckt2: ToothGrowth'
-output: html_document
+output: word_document
 fontsize: 9pt
 ---
 
@@ -13,7 +13,7 @@ data(ToothGrowth)
 ```
 
 
-
+This simple  graphical analysis shows that the length of tooth varies across the three dosages  and across the supplement types in the study. on average, length of tooth increases as the dose increases.
 
 ```{r,echo=FALSE,fig.height= 4}
 boxplot( len ~ interaction(dose,supp), data=ToothGrowth,xlab="dose",ylab="length" )
@@ -21,9 +21,10 @@ boxplot( len ~ interaction(dose,supp), data=ToothGrowth,xlab="dose",ylab="length
 #boxplot( len ~ interaction(supp,dose), data=ToothGrowth, xlab="dose",ylab="length")
 ```
 
-This simple  graphical analysis shows that the length of tooth varies across the three dosages  and across the supplement types in the study. We will next take a look of some values in the data. 
 
 2)Provide a basic summary of the data.
+
+ The data set contains 3 variables:len(length of tooth), dose(dose of Vitamin C) and supp(delivery method ). 
 
 ```{r,echo=FALSE}
  describe(ToothGrowth,num.desc=c("mean","sd","median","min","max","valid.n"))
@@ -31,55 +32,76 @@ This simple  graphical analysis shows that the length of tooth varies across the
  
 ```
 
-This simple  graphical analisys confirms the variation of the length of tooth  across the three dosages and supplement types. We will therefore conduct a formal analysis of the data. 
 
 
- 3) Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
+ 3) compare tooth growth by supp and dose. 
 
-```{r,echo=FALSE,results='hide'}
-tTest<-t.test(ToothGrowth$len~ToothGrowth$supp)
+### test: supp= OJ vs supp = VC
+```{r,echo=TRUE,results='hide'}
+test<-t.test(ToothGrowth$len~ToothGrowth$supp)
 
 ```
 
+```{r,echo=FALSE}
+testCOnfLow<-test$conf[1];testCOnfHigh<-test$conf[2]
+testPvalue<-test$p.val;testmean<-test$est
+````
+
+The p-value is `r testPvalue`, the confidence interval ranges from `r testCOnfLow`  to  `r testCOnfLow`  and contains therefore zero. both supplement have following
+means: `r testmean`
 
 
-We now evaluate the hypothesis that dose 0.5 does not improve growth more than the 1 dose.
-```{r,echo=FALSE,results='hide'}
-
+### test1: dose=0.5 vs dose=1
+```{r}
 t5_and_1 <- subset(ToothGrowth,  dose %in% c(0.5, 1)) #1
-t5_and_2 <- subset(ToothGrowth,  dose %in% c(0.5, 2)) #2
-t2_and_1 <- subset(ToothGrowth,  dose %in% c(2, 1))    #3
+test1<-t.test(len ~ dose, data =t5_and_1)##1
 
-
-Test_05_1 <-t.test(len ~ dose, data =t5_and_1)##1
-Test_05_2 <-t.test(len ~ dose, data = t5_and_2)##2
-dose_2_1  <-t.test(len ~ dose, data = t2_and_1)##3
-df<-data.frame("LowCOnf"=round(c(
-            Test_05_1$conf[1],
-            Test_05_2$conf[1],
-            dose_2_1$conf[1]),3),
-            "HightConf"=round(c(
-            Test_05_1$conf[2],
-            Test_05_2$conf[2],
-            dose_2_1$conf[2]),3),
-            "P.Value"=c(
-            round(Test_05_1$p.value,10),
-            round(Test_05_2$p.value,20),
-            round(dose_2_1$p.value,8)),
-            "Test"=c("0.5 vs 1","0.5 vs 2","2 vs 1")
-)
-           
-df
 ```
 
 
+```{r,echo=FALSE}
+test1COnfLow<-test1$conf[1];test1COnfHigh<-test1$conf[2];test1Pvalue<-test1$p.val
+
+```
+
+The p-value is `r test1Pvalue`, the confidence interval ranges from `r test1COnfLow`  to  `r test1COnfHigh`  and contains zero. 
+
+
+
+##test2: dose=0.5 vs dose=2
+```{r}
+t5_and_2 <- subset(ToothGrowth,  dose %in% c(0.5, 2)) #2
+test2<-t.test(len ~ dose, data = t5_and_2)##2
+```
+
+
+```{r,echo=FALSE}
+test2COnfLow<-test2$conf[1];test2COnfHigh<-test2$conf[2];test2Pvalue<-test2$p.val
+
+```
+
+The p-value is `r test2Pvalue`, the confidence interval ranges from `r test2COnfLow`  to  `r test2COnfHigh`  and contains zero too. 
+
+
+### test3: dose=2 vs dose=1
+```{r}
+t2_and_1 <- subset(ToothGrowth,  dose %in% c(2, 1))    #3
+test3<-t.test(len ~ dose, data = t2_and_1)##3
+
+```
+
+```{r,echo=FALSE}
+test3COnfLow<-test3$conf[1];test3COnfHigh<-test3$conf[2];test3Pvalue<-test3$p.val
+
+```
+ 
+ The p-value is `r test3Pvalue`, the confidence interval ranges from `r test3COnfLow`  to  `r test3COnfHigh`  and contains therfore zero. 
+
+
+4)
 
 As the 95% confidence interval contains the sample mean of the differences, the hypothesis cannot be rejected. There is insufficient evidence to conclude that supplement VC works any better than supplement OJ.
 
-We now evaluate the hypothesis that dosage does improve growth.
-
-
-#### Summary
 With the Welch two sample t-test, the 95% confidence interval contains the sample mean, the hypothesis cannot be rejected. There is sufficient evidence to conclude that increased dosages do affect tooth Growth.
 
 
