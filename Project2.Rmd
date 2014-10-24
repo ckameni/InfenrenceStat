@@ -13,9 +13,6 @@ data(ToothGrowth)
 ```
 
 
-```{r, results='asis'}
-knitr::kable(ToothGrowth)
-```
 
 
 ```{r,echo=FALSE,fig.height= 4}
@@ -40,9 +37,14 @@ This simple  graphical analisys confirms the variation of the length of tooth  a
  3) Use confidence intervals and hypothesis tests to compare tooth growth by supp and dose. (Use the techniques from class even if there’s other approaches worth considering)
 
 ```{r}
-t.test(ToothGrowth$len~ToothGrowth$supp)
+tTest<-t.test(ToothGrowth$len~ToothGrowth$supp)
 
 ```
+
+```{r,testtable ,results='asis'}
+knitr::kable(tTest)
+```
+
 
 
 We now evaluate the hypothesis that dose 0.5 does not improve growth more than the 1 dose.
@@ -71,10 +73,14 @@ df<-data.frame("LowCOnf"=round(c(
             "Test"=c("0.5 vs 1","0.5 vs 2","2 vs 1")
 )
            
-df
+
 ```
 
 
+
+```{r,testtable ,results='asis'}
+knitr::kable(df)
+```
 As the 95% confidence interval contains the sample mean of the differences, the hypothesis cannot be rejected. There is insufficient evidence to conclude that supplement VC works any better than supplement OJ.
 
 We now evaluate the hypothesis that dosage does improve growth.
