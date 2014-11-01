@@ -37,7 +37,7 @@ https://www.youtube.com/watch?v=-XCSZW7Z3S0
 
 
 
-Performing a binomial test in R
+#### Performing a binomial test in R
 
 Posted on November 6, 2012 by Sarah Stowell No Comments Leave a comment
 Binomial test
@@ -77,3 +77,39 @@ sample estimates:
 probability of success 
                    0.2
 From the output you can see that the p-value is 0.07299. As this is not less that the significance level of 0.05, we cannot reject the null hypothesis that the probability of rolling a six is 1/6. This means that there is no evidence to prove that the die is not fair.
+
+
+####Two sample Z-test
+Comparison of the means of two independent groups of samples, taken from two populations with known variance.
+
+Is asked to compare the average heights of two groups. The first group (A) consists of individuals of Italian nationality (the variance of the Italian population is 5); the second group is taken from individuals of German nationality (the variance of German population variance is 8.5). The data are given below:
+
+A: 175, 168, 168, 190, 156, 181, 182, 175, 174, 179
+B: 185, 169, 173, 173, 188, 186, 175, 174, 179, 180
+
+
+Since we have the variance of the population, we must proceed with a two sample Z-test. Even in this case is not avalilable in R a function to solve the problem, but we can easily create it ourselves.
+
+$$Z=\frac{(\overline{x}_1-\overline{x}_2)-(\mu_1-\mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}}$$
+
+
+z.test2sam = function(a, b, var.a, var.b){
+   n.a = length(a)
+   n.b = length(b)
+   zeta = (mean(a) - mean(b)) / (sqrt(var.a/n.a + var.b/n.b))
+   return(zeta)
+}
+
+
+The function z.test2sam provides in output the value of zeta, after receiving in input two vectors (a and b), the variance of the first population (var.a) and the variance of the second population (var.b).
+Using this function we obtain: 
+
+
+a = c(175, 168, 168, 190, 156, 181, 182, 175, 174, 179)
+b = c(185, 169, 173, 173, 188, 186, 175, 174, 179, 180)
+
+z.test2sam(a, b, 5, 8.5)
+[1] -2.926254
+
+
+The value of zeta is greater than the value of the critical value zeta tabulated for alpha equal to 0.05 (z-tabulated = 1.96 for a two-tailed test): then we reject the null hypothesis in favor of the alternative hypothesis. We conclude that the two means are significantly different.
